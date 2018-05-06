@@ -1,6 +1,7 @@
 const strava = require('strava-v3');
 const config = require('./config');
 const mapping = require('./mapping');
+const moment = require('moment');
 const checkInterval = config.interval || 60000;
 const nrOfActivities = config.nrOfActivities || 1;
 
@@ -13,7 +14,8 @@ const isCompleteUpdate = (update) => {
 };
 
 const startChecking = () => {
-  console.log('-----------------------------------------------------------------------');
+  const now = moment().format();
+  console.log(`--------------------------------${now}--------------------------------`);
   strava.athlete.listActivities({...config, per_page: 1},function(err,payload,limits) {
       const updates = [];
       if(!err) {
@@ -34,7 +36,9 @@ const startChecking = () => {
             if (update.from && update.to) {
               update.name = capitalizeFirstLetter(`${update.from} to ${update.to}`);
               update.id = a.id;
-              updates.push(update);
+              if (moment(a.start_date).isSame(moment.now(), 'day')) {
+                updates.push(update);
+              }
             }
           });
           updates.forEach(update => {

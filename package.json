@@ -4,6 +4,7 @@
   "description": "App for automatically updating strava activities",
   "main": "app.js",
   "dependencies": {
+    "moment": "^2.22.1",
     "strava-v3": "^1.14.0"
   },
   "devDependencies": {},
