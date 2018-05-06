@@ -1,0 +1,15 @@
+{
+  "name": "strava",
+  "version": "1.0.0",
+  "description": "App for automatically updating strava activities",
+  "main": "app.js",
+  "dependencies": {
+    "strava-v3": "^1.14.0"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Are Venes",
+  "license": "ISC"
+}
