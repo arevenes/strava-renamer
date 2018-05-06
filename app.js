@@ -15,7 +15,7 @@ const isCompleteUpdate = (update) => {
 
 const startChecking = () => {
   const now = moment().format();
-  console.log(`--------------------------------${now}--------------------------------`);
+  console.log(`---------------------------${now}---------------------------`);
   strava.athlete.listActivities({...config, per_page: 1},function(err,payload,limits) {
       const updates = [];
       if(!err) {
