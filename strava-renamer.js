@@ -36,7 +36,7 @@ const startChecking = () => {
             if (update.from && update.to) {
               update.name = capitalizeFirstLetter(`${update.from} to ${update.to}`);
               update.id = a.id;
-              if (moment(a.start_date).isSame(moment.now(), 'day') && a.name !== update.name) {
+              if (moment(a.start_date).isSame(moment.now(), 'day') && (a.name !== update.name && !a.name.endsWith('!'))) {
                 updates.push(update);
               }
             }
@@ -59,6 +59,16 @@ const startChecking = () => {
       }
   });
 }
-console.log(`Started looking for ${nrOfActivities} activities... interval is every ${checkInterval / 1000} seconds`);
-startChecking();
-setInterval(startChecking, checkInterval);
+
+if (process.argv[2] === 'listactivities') {
+  console.log('Your 100 last activites:');
+  strava.athlete.listActivities({...config, per_page: 100},function(err,payload,limits) {
+    payload.forEach(a => {
+      console.log(`name: ${a.name}, startLat/Lng: ${a.start_latlng[0]}/${a.start_latlng[1]}, endLat/Lng: ${a.end_latlng[0]}/${a.end_latlng[1]}`)
+    });
+  });
+} else {
+  console.log(`Started looking for ${nrOfActivities} activities... interval is every ${checkInterval / 1000} seconds`);
+  startChecking();
+  setInterval(startChecking, checkInterval);
+}
