@@ -16,7 +16,7 @@ const isCompleteUpdate = (update) => {
 const startChecking = () => {
   const now = moment().format();
   console.log(`---------------------------${now}---------------------------`);
-  strava.athlete.listActivities({...config, per_page: nrOfActivities},function(err,payload,limits) {
+  strava.athlete.listActivities({...config, per_page: 1},function(err,payload,limits) {
       const updates = [];
       if(!err) {
           payload.forEach(a => {
@@ -36,7 +36,7 @@ const startChecking = () => {
             if (update.from && update.to) {
               update.name = capitalizeFirstLetter(`${update.from} to ${update.to}`);
               update.id = a.id;
-              if (moment(a.start_date).isSame(moment.now(), 'day')) {
+              if (moment(a.start_date).isSame(moment.now(), 'day') && a.name !== update.name) {
                 updates.push(update);
               }
             }
@@ -44,7 +44,7 @@ const startChecking = () => {
           updates.forEach(update => {
             if (isCompleteUpdate(update)) {
               console.log(`UPDATE READY FOR ACTIVITY: ${update.id}: ${update.name}`);
-              strava.activities.update({...config, id: update.id, name: update.name }, (err, payload, limits) => {
+              strava.activities.update({...config, id: update.id, name: update.name, description: config.description }, (err, payload, limits) => {
                if (!err) {
                  console.log(`UPDATED ACTIVITY: ${update.id} SUCCESSFULLY`);
                } else {
