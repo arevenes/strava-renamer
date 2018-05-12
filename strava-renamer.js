@@ -18,7 +18,7 @@ const startChecking = () => {
   console.log(`---------------------------${now}---------------------------`);
   strava.athlete.listActivities({...config, per_page: 1},function(err,payload,limits) {
       const updates = [];
-      if(!err) {
+      if(!err && payload) {
           payload.forEach(a => {
             const update = {};
             const startLat = a.start_latlng[0];
